@@ -1,0 +1,19 @@
+volumes:
+  rabbitmq_data:
+services:
+  rabbitmq:
+    build:
+      context: ./rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15692:15692"
+      - "1883:1883"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+      #NOTE: https://stackoverflow.com/questions/30747469/how-to-add-initial-users-when-starting-a-rabbitmq-docker-container
+    networks:
+      - default
