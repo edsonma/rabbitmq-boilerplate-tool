@@ -19,7 +19,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
   perf_tool:
     image: pivotalrabbitmq/perf-test
     container_name: perf_tool
@@ -28,8 +27,14 @@ services:
         condition: service_healthy
     command: >
       ./runjava.sh com.rabbitmq.perf.PerfTest
-      --uri amqp://mqadmin:mq4dm1n_pass@rabbitmq:5672 --producers 1 --consumers 1
-      --rate 100 --time 60 --size 1024
+      --uri amqp://mqadmin:mq4dm1n_pass@rabbitmq:5672 
+      --producers ${PRODUCERS}
+      --consumers ${CONSUMERS}
+      --queue ${QUEUE}
+      --id ${ID}
+      --time ${TIME}
+      --size ${SIZE}
+      ${EXTRA_ARGS}
 networks:
   default:
     driver: bridge
