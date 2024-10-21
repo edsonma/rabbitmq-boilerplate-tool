@@ -14,5 +14,22 @@ services:
       - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
       - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
       - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
-    networks:
-      - default
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  perf_tool:
+    image: pivotalrabbitmq/perf-test
+    container_name: perf_tool
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: >
+      ./runjava.sh com.rabbitmq.perf.PerfTest
+      --uri amqp://mqadmin:mq4dm1n_pass@rabbitmq:5672 --producers 1 --consumers 1
+      --rate 100 --time 60 --size 1024
+networks:
+  default:
+    driver: bridge

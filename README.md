@@ -88,6 +88,26 @@ RabbitMQ uses several ports to handle different protocols and functionalities:
   - **Protocol**: MQTT (Message Queuing Telemetry Transport)
   - The port for handling MQTT connections, typically used in IoT environments.
 
+### perfTest Tool  
+The perfTest tool in the docker-compose.yml service is designed to simulate a messaging workload on RabbitMQ.
+
+      ./runjava.sh com.rabbitmq.perf.PerfTest
+      --uri amqp://mqadmin:mq4dm1n_pass@rabbitmq:5672 --producers 1 --consumers 1
+      --rate 100 --time 60 --size 1024
+
+* --uri amqp://mqadmin:mq4dm1n_pass@rabbitmq:5672: Connects to the RabbitMQ instance at rabbitmq:5672 using the credentials mqadmin and mq4dm1n_pass.
+* --producers 1: Uses 1 message producer.
+* --consumers 1: Uses 1 message consumer.
+* --rate 100: Sends 100 messages per second.
+* --time 60: Runs the test for 60 seconds.
+* --size 1024: Each message is 1024 bytes in size.
+
+This test measures the performance of RabbitMQ under a load of 100 messages per second with 1 producer and 1 consumer.
+
+#### Future Improvement
+To make the test more flexible, the hardcoded test command in the docker-compose can be extracted into customizable scenarios for different performance test cases.
+
+
 ## 🚀 Contribute and Improve the Project
 
 We’re always looking for ways to enhance this RabbitMQ boilerplate! Here’s how you can contribute:
